@@ -1,0 +1,5 @@
+allow url http://expdev.net/urtutorial/step3/style.css
+database dbname=urblog
+sql urblog.sql
+
+urblog
