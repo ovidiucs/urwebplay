@@ -7,8 +7,8 @@ fun list () =
     rows <- queryX (SELECT * FROM entry)
             (fn row => 
 				<xml>
-					<div>
-						<h1>{[row.Entry.Title]}</h1><br />
+					<div class={blogEntry}>
+						<h1><a link={detail row.Entry.Id}>{[row.Entry.Title]}</a></h1>
 							<h2>By {[row.Entry.Author]} at {[row.Entry.Created]}</h2>
 						<p>{[row.Entry.Body]}</p>
 					</div>
@@ -25,7 +25,30 @@ fun list () =
         {rows}
 		  </body>
     	</xml>
-
+and detail (i:int) =
+    res <- oneOrNoRows (SELECT * FROM entry WHERE entry.Id = {[i]});
+    return
+    (case res of
+        None => <xml>
+            <head><title>Entry Not Found</title></head>
+            <body>
+                <h1>Entry not found</h1>
+            </body>
+            </xml>
+      | Some r => <xml>
+                   <head>
+                     <title>{[r.Entry.Title]}</title>
+                     <link rel="stylesheet" type="text/css" href="http://expdev.net/urtutorial/step4/style.css"/>
+				   </head>
+				   <body>
+				   <h1>{[r.Entry.Title]}</h1>
+                   <h2>By {[r.Entry.Author]} at {[r.Entry.Created]}</h2>
+                   <div class={blogEntry}>
+                   <p>{[r.Entry.Body]}</p>
+                   </div>
+				   <a link={list ()}>Back to all entries</a>
+                   </body>
+                 </xml>)	
 fun main () = return <xml>
   <head>
     <title>UrBlog</title>
