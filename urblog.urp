@@ -1,5 +1,7 @@
 allow url http://expdev.net/urtutorial/step3/style.css
 allow url http://expdev.net/urtutorial/step4/style.css
+rewrite style Urblog/blogEntry blogEntry
+rewrite style Urblog/blogComment blogComment
 database dbname=urblog
 sql urblog.sql
 
