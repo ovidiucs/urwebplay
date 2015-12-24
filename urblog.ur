@@ -7,6 +7,7 @@ table comment : {Id : int, Entry : int, Created : time, Author : string, Body : 
 
 style blogEntry
 style blogComment
+style commentForm
 
 fun comments i : transaction xbody = 
 	queryX (SELECT * FROM comment WHERE comment.Entry = {[i]})
@@ -17,6 +18,14 @@ fun comments i : transaction xbody =
 					<p>By {[row.Comment.Author]} at {[row.Comment.Created]}</p>
 				</div>
 			</xml>)
+and handler entry r = detail entry 
+and mkCommentForm (id:int) s : xbody =
+    <xml><form>
+        <p>Your Name:<br/></p>"<textbox{#Author}/><br/>
+        <p>Your Comment:<br/></p><textarea{#Body}/>
+        <br/><br/>
+        <submit value="Add Comment" action={handler id}/>
+        <button value="Cancel" onclick ={ fn _ => set s False}/></form></xml>
 
 fun list () =
     rows <- queryX (SELECT * FROM entry)
@@ -43,6 +52,7 @@ fun list () =
 and detail (i:int) =
     res <- oneOrNoRows (SELECT * FROM entry WHERE entry.Id = {[i]});
 	comm <- comments i;
+    commentSource <- source False;
     return
     (case res of
         None => <xml>
@@ -61,7 +71,14 @@ and detail (i:int) =
                    <h2>By {[r.Entry.Author]} at {[r.Entry.Created]}</h2>
                    <div class={blogEntry}>
                    <p>{[r.Entry.Body]}</p>
+				   <button value="Add Comment" onclick={ fn _ => set commentSource True }/>
                    </div>
+				   <div class={commentForm}>
+				   <dyn signal={s <- signal commentSource;
+			if s them
+							return {mkCommentForm i commentSource}
+			else return <xml/>}/>
+				   </div>
 				   {comm}
 				   <a link={list ()}>Back to all entries</a>
                    </body>
