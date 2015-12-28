@@ -16,4 +16,6 @@ CREATE TABLE uw_Urblog_entry(uw_id int8 NOT NULL, uw_title text NOT NULL,
      FOREIGN KEY (uw_entry) REFERENCES uw_Urblog_entry (uw_id)
    );
    
-   
+   CREATE SEQUENCE uw_Urblog_seq;
+    
+    

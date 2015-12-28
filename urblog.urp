@@ -6,4 +6,6 @@ rewrite style Urblog/blogComment blogComment
 database dbname=urblog
 sql urblog.sql
 
+$/string
+crud
 urblog

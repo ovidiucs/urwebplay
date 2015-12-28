@@ -10,6 +10,7 @@ style blogEntry
 style blogComment
 style commentForm
 
+
 fun comments i : transaction xbody = 
 	queryX (SELECT * FROM comment WHERE comment.Entry = {[i]})
          (fn row =>
@@ -98,3 +99,15 @@ fun main () = return <xml>
     <h1>UrBlog</h1>
   </body>
 </xml>
+
+open Crud.Make(struct
+    val tab = entry
+
+    val title = "Blog Admin"
+
+    val cols = {Title = Crud.string "Blog Title", 
+                Created = Crud.time "Created",
+                Author = Crud.string "Author",
+                Body = Crud.string "Entry Body"}
+(* test *)
+end)
