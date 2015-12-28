@@ -104,10 +104,27 @@ open Crud.Make(struct
     val tab = entry
 
     val title = "Blog Admin"
-
+(*
     val cols = {Title = Crud.string "Blog Title", 
                 Created = Crud.time "Created",
                 Author = Crud.string "Author",
-                Body = Crud.string "Entry Body"}
-(* test *)
+                Body = {Nam = "Entry Body",
+						Show = fn b => <xml>{[String.length b]} characters</xml>,
+						Widget = fn [nm :: Name] => <xml><textarea>{nm}/></xml>,
+						WidgetPopulated =
+							fn [nm :: Name] b => <xml><textarea>{nm}>{[b]}</textarea></xml>,
+						Parse = readError,
+						Inject = _}
+ test *)
+  val cols = {Title = Crud.string "Blog Title",
+              Created = Crud.time "Created",
+              Author = Crud.string "Author",
+              Body = {Nam = "Entry Body",
+                      Show = fn b => <xml>{[String.length b]} characters</xml>,
+                      Widget = fn [nm :: Name] => <xml><textarea{nm}/></xml>,
+                      WidgetPopulated = 
+                         fn [nm :: Name] b => <xml><textarea{nm}>{[b]}</textarea></xml>,
+                      Parse = readError,
+                      Inject = _}
+            }
 end)
