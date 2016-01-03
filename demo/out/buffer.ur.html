@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>buffer.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">datatype</span> <span class="type-def">lines</span> = <span class="cvariable">End</span> | <span class="cvariable">Line</span> <span class="keyword">of</span> string * source lines
+
+<span class="keyword">type</span> <span class="type-def">t</span> = { <span class="cvariable">Head</span> : source lines, <span class="cvariable">Tail</span> : source (source lines) }
+
+<span class="keyword">val</span> <span class="variable-name">create</span> =
+    head &lt;- source <span class="cvariable">End</span>;
+    tail &lt;- source head;
+    return {<span class="cvariable">Head</span> = head, <span class="cvariable">Tail</span> = tail}
+
+<span class="keyword">fun</span> <span class="function-name">renderL</span> lines =
+    <span class="keyword">case</span> lines <span class="keyword">of</span>
+        <span class="cvariable">End</span> =&gt; <span class="tag">&lt;xml/&gt;</span>
+      | <span class="cvariable">Line</span> (line, linesS) =&gt; <span class="tag">&lt;xml&gt;</span>{[line]}<span class="tag">&lt;br/&gt;&lt;dyn</span> signal={renderS linesS}<span class="tag">/&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">renderS</span> linesS =
+    lines &lt;- signal linesS;
+    return (renderL lines)
+
+<span class="keyword">fun</span> <span class="function-name">render</span> t = renderS t.<span class="cvariable">Head</span>
+
+<span class="keyword">fun</span> <span class="function-name">write</span> t s =
+    oldTail &lt;- get t.<span class="cvariable">Tail</span>;
+    newTail &lt;- source <span class="cvariable">End</span>;
+    set oldTail (<span class="cvariable">Line</span> (s, newTail));
+    set t.<span class="cvariable">Tail</span> newTail
+</pre>
+  </body>
+</html>

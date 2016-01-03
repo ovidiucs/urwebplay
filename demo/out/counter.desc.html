@@ -1,0 +1,15 @@
+<html><head>
+<title>Counter</title>
+</head><body>
+
+<h1>Counter</h1>
+
+<center>[ <a target="showcase" href="/Demo/Counter/main">Application</a> | <a target="showcase" href="counter.urp.html"><tt>counter.urp</tt></a> | <a target="showcase" href="counter.urs.html"><tt>counter.urs</tt></a> | <a target="showcase" href="counter.ur.html"><tt>counter.ur</tt></a> ]</center>
+
+
+<p>It is also easy to pass state around via functions, in the style commonly associated with "continuation-based" web servers.  As is usual for such systems, all state is stored on the client side.  In this case, it is encoded in URLs.</p>
+
+<p>In the implementation of <tt>Counter.counter</tt>, we see the notation <tt>{[...]}</tt>, which uses type classes to inject values of different types (<tt>int</tt> in this case) into XML.  It's probably worth stating explicitly that XML fragments <i>are not strings</i>, so that the type-checker will enforce that our final piece of XML is valid.</p>
+
+
+</body></html>

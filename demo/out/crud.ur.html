@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>crud.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .module-def {
+        /* font-lock-module-def-face */
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">con</span> <span class="type-def">colMeta</span> = <span class="keyword">fn</span> (db :: <span class="keyword">Type</span>, widget :: <span class="keyword">Type</span>) =&gt;
+                 {<span class="cvariable">Nam</span> : string,
+                  <span class="cvariable">Show</span> : db -&gt; xbody,
+                  <span class="cvariable">Widget</span> : nm :: <span class="keyword">Name</span> -&gt; xml form [] [nm = widget],
+                  <span class="cvariable">WidgetPopulated</span> : nm :: <span class="keyword">Name</span> -&gt; db -&gt; xml form [] [nm = widget],
+                  <span class="cvariable">Parse</span> : widget -&gt; db,
+                  <span class="cvariable">Inject</span> : sql_injectable db}
+<span class="keyword">con</span> <span class="type-def">colsMeta</span> = <span class="keyword">fn</span> cols :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)} =&gt; $(<span class="keyword">map</span> colMeta cols)
+
+<span class="keyword">fun</span> <span class="function-name">default</span> [t] (sh : show t) (rd : read t) (inj : sql_injectable t)
+            name : colMeta (t, string) =
+    {<span class="cvariable">Nam</span> = name,
+     <span class="cvariable">Show</span> = txt,
+     <span class="cvariable">Widget</span> = <span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] =&gt; <span class="tag">&lt;xml&gt;&lt;textbox</span>{nm}<span class="tag">/&gt;&lt;/xml&gt;</span>,
+     <span class="cvariable">WidgetPopulated</span> = <span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] n =&gt;
+                          <span class="tag">&lt;xml&gt;&lt;textbox</span>{nm} value={show n}<span class="tag">/&gt;&lt;/xml&gt;</span>,
+     <span class="cvariable">Parse</span> = readError,
+     <span class="cvariable">Inject</span> = _}
+
+<span class="keyword">val</span> <span class="variable-name">int</span> = default
+<span class="keyword">val</span> <span class="variable-name">float</span> = default
+<span class="keyword">val</span> <span class="variable-name">string</span> = default
+
+<span class="keyword">fun</span> <span class="function-name">bool</span> name = {<span class="cvariable">Nam</span> = name,
+                 <span class="cvariable">Show</span> = txt,
+                 <span class="cvariable">Widget</span> = <span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] =&gt; <span class="tag">&lt;xml&gt;&lt;checkbox</span>{nm}<span class="tag">/&gt;&lt;/xml&gt;</span>,
+                 <span class="cvariable">WidgetPopulated</span> = <span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] b =&gt;
+                                      <span class="tag">&lt;xml&gt;&lt;checkbox</span>{nm} checked={b}<span class="tag">/&gt;&lt;/xml&gt;</span>,
+                 <span class="cvariable">Parse</span> = <span class="keyword">fn</span> x =&gt; x,
+                 <span class="cvariable">Inject</span> = _}
+
+<span class="keyword">functor</span> <span class="module-def">Make</span>(<span class="cvariable">M</span> : <span class="keyword">sig</span>
+                 <span class="keyword">con</span> <span class="type-def">cols</span> :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}
+                 <span class="keyword">constraint</span> [<span class="cvariable">Id</span>] ~ cols
+                 <span class="keyword">val</span> <span class="variable-name">fl</span> : folder cols
+
+                 <span class="keyword">table</span> <span class="variable-name">tab</span> : ([<span class="cvariable">Id</span> = int] ++ <span class="keyword">map</span> fst cols)
+
+                 <span class="keyword">val</span> <span class="variable-name">title</span> : string
+
+                 <span class="keyword">val</span> <span class="variable-name">cols</span> : colsMeta cols
+             <span class="keyword">end</span>) = <span class="keyword">struct</span>
+
+    <span class="keyword">val</span> <span class="variable-name">tab</span> = <span class="cvariable">M</span>.tab
+
+    <span class="keyword">sequence</span> seq
+
+    <span class="keyword">fun</span> <span class="function-name">list</span> () =
+        rows &lt;- queryX (<span class="sql">SELECT</span> * <span class="sql">FROM</span> tab <span class="sql">AS</span> <span class="cvariable">T</span>)
+                       (<span class="keyword">fn</span> (fs : {<span class="cvariable">T</span> : $([<span class="cvariable">Id</span> = int] ++ <span class="keyword">map</span> fst <span class="cvariable">M</span>.cols)}) =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                         </span><span class="tag">&lt;tr&gt;</span><span class="string">
+                           </span><span class="tag">&lt;td&gt;</span>{[fs.<span class="cvariable">T</span>.<span class="cvariable">Id</span>]}<span class="tag">&lt;/td&gt;</span><span class="string">
+                           </span>{@foldRX2 [fst] [colMeta] [tr]
+                             (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                                              [[nm] ~ rest] v col =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                                                </span><span class="tag">&lt;td&gt;</span>{col.<span class="cvariable">Show</span> v}<span class="tag">&lt;/td&gt;</span><span class="string">
+                                              </span><span class="tag">&lt;/xml&gt;</span>)
+                             <span class="cvariable">M</span>.fl (fs.<span class="cvariable">T</span> -- #<span class="cvariable">Id</span>) <span class="cvariable">M</span>.cols}<span class="string">
+                           </span><span class="tag">&lt;td&gt;</span><span class="string">
+                             </span><span class="tag">&lt;a</span> link={upd fs.<span class="cvariable">T</span>.<span class="cvariable">Id</span>}<span class="tag">&gt;</span><span class="string">[Update]</span><span class="tag">&lt;/a&gt;</span><span class="string">
+                             </span><span class="tag">&lt;a</span> link={confirm fs.<span class="cvariable">T</span>.<span class="cvariable">Id</span>}<span class="tag">&gt;</span><span class="string">[Delete]</span><span class="tag">&lt;/a&gt;</span><span class="string">
+                           </span><span class="tag">&lt;/td&gt;</span><span class="string">
+                         </span><span class="tag">&lt;/tr&gt;</span><span class="string">
+                       </span><span class="tag">&lt;/xml&gt;</span>);
+        return <span class="tag">&lt;xml&gt;</span><span class="string">
+          </span><span class="tag">&lt;table</span> border={1}<span class="tag">&gt;</span><span class="string">
+            </span><span class="tag">&lt;tr&gt;</span><span class="string">
+              </span><span class="tag">&lt;th&gt;</span><span class="string">ID</span><span class="tag">&lt;/th&gt;</span><span class="string">
+              </span>{@foldRX [colMeta] [tr]
+                (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                                 [[nm] ~ rest] col =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                                   </span><span class="tag">&lt;th&gt;</span>{cdata col.<span class="cvariable">Nam</span>}<span class="tag">&lt;/th&gt;</span><span class="string">
+                                 </span><span class="tag">&lt;/xml&gt;</span>)
+                <span class="cvariable">M</span>.fl <span class="cvariable">M</span>.cols}<span class="string">
+            </span><span class="tag">&lt;/tr&gt;</span><span class="string">
+            </span>{rows}<span class="string">
+          </span><span class="tag">&lt;/table&gt;</span><span class="string">
+
+          </span><span class="tag">&lt;br/&gt;&lt;hr/&gt;&lt;br/&gt;</span><span class="string">
+
+          </span><span class="tag">&lt;form&gt;</span><span class="string">
+            </span>{@foldR [colMeta] [<span class="keyword">fn</span> cols :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)} =&gt; xml form [] (<span class="keyword">map</span> snd cols)]
+              (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                               [[nm] ~ rest] (col : colMeta t) (acc : xml form [] (<span class="keyword">map</span> snd rest)) =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                                 </span><span class="tag">&lt;li&gt;</span><span class="string"> </span>{cdata col.<span class="cvariable">Nam</span>}<span class="string">: </span>{col.<span class="cvariable">Widget</span> [nm]}<span class="tag">&lt;/li&gt;</span><span class="string">
+                                 </span>{useMore acc}<span class="string">
+                               </span><span class="tag">&lt;/xml&gt;</span>)
+              <span class="tag">&lt;xml/&gt;</span>
+              <span class="cvariable">M</span>.fl <span class="cvariable">M</span>.cols}<span class="string">
+            
+            </span><span class="tag">&lt;submit</span> action={create}<span class="tag">/&gt;</span><span class="string">
+          </span><span class="tag">&lt;/form&gt;</span><span class="string">
+        </span><span class="tag">&lt;/xml&gt;</span>
+
+    <span class="keyword">and</span> <span class="function-name">create</span> (inputs : $(<span class="keyword">map</span> snd <span class="cvariable">M</span>.cols)) =
+        id &lt;- nextval seq;
+        dml (insert tab
+                    (@foldR2 [snd] [colMeta]
+                      [<span class="keyword">fn</span> cols =&gt; $(<span class="keyword">map</span> (<span class="keyword">fn</span> t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>) =&gt;
+                                            sql_exp [] [] [] t.1) cols)]
+                      (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                                       [[nm] ~ rest] =&gt;
+                       <span class="keyword">fn</span> input col acc =&gt; acc ++ {nm = @sql_inject col.<span class="cvariable">Inject</span> (col.<span class="cvariable">Parse</span> input)})
+                      {} <span class="cvariable">M</span>.fl inputs <span class="cvariable">M</span>.cols
+                     ++ {<span class="cvariable">Id</span> = (<span class="sql">SQL</span> {[id]})}));
+        ls &lt;- list ();
+        return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+          </span><span class="tag">&lt;p&gt;</span><span class="string">Inserted with ID </span>{[id]}<span class="string">.</span><span class="tag">&lt;/p&gt;</span><span class="string">
+
+          </span>{ls}<span class="string">
+        </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+    <span class="keyword">and</span> <span class="function-name">upd</span> (id : int) =
+        <span class="keyword">let</span>
+            <span class="keyword">fun</span> <span class="function-name">save</span> (inputs : $(<span class="keyword">map</span> snd <span class="cvariable">M</span>.cols)) =
+                dml (update [<span class="keyword">map</span> fst <span class="cvariable">M</span>.cols]
+                            (@foldR2 [snd] [colMeta]
+                              [<span class="keyword">fn</span> cols =&gt; $(<span class="keyword">map</span> (<span class="keyword">fn</span> t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>) =&gt;
+                                                    sql_exp [<span class="cvariable">T</span> = [<span class="cvariable">Id</span> = int]
+                                                                     ++ <span class="keyword">map</span> fst <span class="cvariable">M</span>.cols]
+                                                            [] [] t.1) cols)]
+                              (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                                               [[nm] ~ rest] =&gt;
+                               <span class="keyword">fn</span> input col acc =&gt; acc ++ {nm =
+                                                           @sql_inject col.<span class="cvariable">Inject</span> (col.<span class="cvariable">Parse</span> input)})
+                              {} <span class="cvariable">M</span>.fl inputs <span class="cvariable">M</span>.cols)
+                            tab (<span class="sql">WHERE</span> <span class="cvariable">T</span>.<span class="cvariable">Id</span> = {[id]}));
+                ls &lt;- list ();
+                return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+                  </span><span class="tag">&lt;p&gt;</span><span class="string">Saved!</span><span class="tag">&lt;/p&gt;</span><span class="string">
+
+                  </span>{ls}<span class="string">
+                </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+        <span class="keyword">in</span>
+            fso &lt;- oneOrNoRows (<span class="sql">SELECT</span> tab.{{<span class="keyword">map</span> fst <span class="cvariable">M</span>.cols}} <span class="sql">FROM</span> tab <span class="sql">WHERE</span> tab.<span class="cvariable">Id</span> = {[id]});
+            <span class="keyword">case</span> fso : (<span class="cvariable">Basis</span>.option {<span class="cvariable">Tab</span> : $(<span class="keyword">map</span> fst <span class="cvariable">M</span>.cols)}) <span class="keyword">of</span>
+                <span class="cvariable">None</span> =&gt; return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">Not found!</span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+              | <span class="cvariable">Some</span> fs =&gt; return <span class="tag">&lt;xml&gt;&lt;body&gt;&lt;form&gt;</span><span class="string">
+                </span>{@foldR2 [fst] [colMeta] [<span class="keyword">fn</span> cols :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)} =&gt; xml form [] (<span class="keyword">map</span> snd cols)]
+                  (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [t :: (<span class="keyword">Type</span> * <span class="keyword">Type</span>)] [rest :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}]
+                                   [[nm] ~ rest] (v : t.1) (col : colMeta t)
+                                   (acc : xml form [] (<span class="keyword">map</span> snd rest)) =&gt;
+                      <span class="tag">&lt;xml&gt;</span><span class="string">
+                        </span><span class="tag">&lt;li&gt;</span><span class="string"> </span>{cdata col.<span class="cvariable">Nam</span>}<span class="string">: </span>{col.<span class="cvariable">WidgetPopulated</span> [nm] v}<span class="tag">&lt;/li&gt;</span><span class="string">
+                        </span>{useMore acc}<span class="string">
+                      </span><span class="tag">&lt;/xml&gt;</span>)
+                  <span class="tag">&lt;xml/&gt;</span>
+                  <span class="cvariable">M</span>.fl fs.<span class="cvariable">Tab</span> <span class="cvariable">M</span>.cols}<span class="string">
+
+                </span><span class="tag">&lt;submit</span> action={save}<span class="tag">/&gt;</span><span class="string">
+              </span><span class="tag">&lt;/form&gt;&lt;/body&gt;&lt;/xml&gt;</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">and</span> <span class="function-name">confirm</span> (id : int) =
+        <span class="keyword">let</span>
+            <span class="keyword">fun</span> <span class="function-name">delete</span> () =
+                dml (<span class="sql">DELETE</span> <span class="sql">FROM</span> tab <span class="sql">WHERE</span> <span class="cvariable">Id</span> = {[id]});
+                ls &lt;- list ();
+                return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+                  </span><span class="tag">&lt;p&gt;</span><span class="string">The deed is done.</span><span class="tag">&lt;/p&gt;</span><span class="string">
+                  
+                  </span>{ls}<span class="string">
+                </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+        <span class="keyword">in</span>
+            return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+              </span><span class="tag">&lt;p&gt;</span><span class="string">Are you sure you want to delete ID #</span>{[id]}<span class="string">?</span><span class="tag">&lt;/p&gt;</span><span class="string">
+              
+              </span><span class="tag">&lt;form&gt;&lt;submit</span> action={delete} value=<span class="string">"I was born sure!"</span><span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+            </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+        <span class="keyword">end</span>    
+
+    <span class="keyword">and</span> <span class="function-name">main</span> () =
+        ls &lt;- list ();
+        return <span class="tag">&lt;xml&gt;&lt;head&gt;</span><span class="string">
+          </span><span class="tag">&lt;title&gt;</span>{cdata <span class="cvariable">M</span>.title}<span class="tag">&lt;/title&gt;</span><span class="string">
+        </span><span class="tag">&lt;/head&gt;&lt;body&gt;</span><span class="string">
+
+          </span><span class="tag">&lt;h1&gt;</span>{cdata <span class="cvariable">M</span>.title}<span class="tag">&lt;/h1&gt;</span><span class="string">
+
+          </span>{ls}<span class="string">
+        </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">end</span>
+</pre>
+  </body>
+</html>

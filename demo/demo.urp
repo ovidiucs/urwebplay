@@ -1,0 +1,58 @@
+database dbname=test
+sql demo.sql
+prefix /Demo
+rewrite style Css/quote quote
+deny url http://en.wikipedia.org/wiki/PHP
+allow url http://en.wikipedia.org/wiki/*
+allow url http://adam.chlipala.net/style.css
+allow mime text/plain
+allow mime image/png
+allow mime image/gif
+
+/home/mig/git/urweb-20151220/demo/hello
+/home/mig/git/urweb-20151220/demo/link
+/home/mig/git/urweb-20151220/demo/rec
+/home/mig/git/urweb-20151220/demo/counter
+/home/mig/git/urweb-20151220/demo/form
+/home/mig/git/urweb-20151220/demo/nested
+/home/mig/git/urweb-20151220/demo/cookie
+/home/mig/git/urweb-20151220/demo/url
+/home/mig/git/urweb-20151220/demo/css
+/home/mig/git/urweb-20151220/demo/upload
+/home/mig/git/urweb-20151220/demo/subforms
+/home/mig/git/urweb-20151220/demo/list
+/home/mig/git/urweb-20151220/demo/listFun
+/home/mig/git/urweb-20151220/demo/listShop
+/home/mig/git/urweb-20151220/demo/sql
+/home/mig/git/urweb-20151220/demo/refFun
+/home/mig/git/urweb-20151220/demo/ref
+/home/mig/git/urweb-20151220/demo/treeFun
+/home/mig/git/urweb-20151220/demo/tree
+/home/mig/git/urweb-20151220/demo/constraints
+/home/mig/git/urweb-20151220/demo/outer
+/home/mig/git/urweb-20151220/demo/view
+/home/mig/git/urweb-20151220/demo/cookieSec
+/home/mig/git/urweb-20151220/demo/sum
+/home/mig/git/urweb-20151220/demo/tcSum
+/home/mig/git/urweb-20151220/demo/metaform
+/home/mig/git/urweb-20151220/demo/metaform1
+/home/mig/git/urweb-20151220/demo/metaform2
+/home/mig/git/urweb-20151220/demo/crud
+/home/mig/git/urweb-20151220/demo/crud1
+/home/mig/git/urweb-20151220/demo/crud2
+/home/mig/git/urweb-20151220/demo/crud3
+/home/mig/git/urweb-20151220/demo/alert
+/home/mig/git/urweb-20151220/demo/react
+/home/mig/git/urweb-20151220/demo/listEdit
+/home/mig/git/urweb-20151220/demo/increment
+/home/mig/git/urweb-20151220/demo/noisy
+/home/mig/git/urweb-20151220/demo/batch
+/home/mig/git/urweb-20151220/demo/batchFun
+/home/mig/git/urweb-20151220/demo/batchG
+/home/mig/git/urweb-20151220/demo/buffer
+/home/mig/git/urweb-20151220/demo/threads
+/home/mig/git/urweb-20151220/demo/roundTrip
+/home/mig/git/urweb-20151220/demo/broadcast
+/home/mig/git/urweb-20151220/demo/chat
+
+demo

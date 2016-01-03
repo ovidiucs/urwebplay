@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>noisy.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">datatype</span> <span class="type-def">list</span> t = <span class="cvariable">Nil</span> | <span class="cvariable">Cons</span> <span class="keyword">of</span> t * list t
+
+<span class="keyword">table</span> <span class="variable-name">t</span> : { <span class="cvariable">Id</span> : int, <span class="cvariable">A</span> : string }
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Id</span>
+
+<span class="keyword">fun</span> <span class="function-name">add</span> id s =
+    dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> t (<span class="cvariable">Id</span>, <span class="cvariable">A</span>) <span class="sql">VALUES</span> ({[id]}, {[s]}))
+
+<span class="keyword">fun</span> <span class="function-name">del</span> id =
+    dml (<span class="sql">DELETE</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> t.<span class="cvariable">Id</span> = {[id]})
+
+<span class="keyword">fun</span> <span class="function-name">lookup</span> id =
+    ro &lt;- oneOrNoRows (<span class="sql">SELECT</span> t.<span class="cvariable">A</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> t.<span class="cvariable">Id</span> = {[id]});
+    <span class="keyword">case</span> ro <span class="keyword">of</span>
+        <span class="cvariable">None</span> =&gt; return <span class="cvariable">None</span>
+      | <span class="cvariable">Some</span> r =&gt; return (<span class="cvariable">Some</span> r.<span class="cvariable">T</span>.<span class="cvariable">A</span>)
+
+<span class="keyword">fun</span> <span class="function-name">check</span> ls =
+    <span class="keyword">case</span> ls <span class="keyword">of</span>
+        <span class="cvariable">Nil</span> =&gt; return ()
+      | <span class="cvariable">Cons</span> (id, ls') =&gt;
+        ao &lt;- rpc (lookup id);
+        alert (<span class="keyword">case</span> ao <span class="keyword">of</span>
+                   <span class="cvariable">None</span> =&gt; <span class="string">"Nada"</span>
+                 | <span class="cvariable">Some</span> a =&gt; a);
+        check ls'
+
+<span class="keyword">fun</span> <span class="function-name">main</span> () =
+    idAdd &lt;- source <span class="string">""</span>;
+    aAdd &lt;- source <span class="string">""</span>;
+
+    idDel &lt;- source <span class="string">""</span>;
+
+    return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      </span><span class="tag">&lt;button</span> value=<span class="string">"Check values of 1, 2, and 3"</span> onclick={check (<span class="cvariable">Cons</span> (1, <span class="cvariable">Cons</span> (2, <span class="cvariable">Cons</span> (3, <span class="cvariable">Nil</span>))))}<span class="tag">/&gt;&lt;br/&gt;</span><span class="string">
+      </span><span class="tag">&lt;br/&gt;</span><span class="string">
+      </span><span class="tag">&lt;button</span> value=<span class="string">"Add"</span> onclick={id &lt;- get idAdd; a &lt;- get aAdd; rpc (add (readError id) a)}<span class="tag">/&gt;</span><span class="string">
+      </span><span class="tag">&lt;ctextbox</span> source={idAdd}<span class="tag">/&gt;</span><span class="string">
+      </span><span class="tag">&lt;ctextbox</span> source={aAdd}<span class="tag">/&gt;&lt;br/&gt;</span><span class="string">
+      </span><span class="tag">&lt;br/&gt;</span><span class="string">
+      </span><span class="tag">&lt;button</span> value=<span class="string">"Delete"</span> onclick={id &lt;- get idDel; rpc (del (readError id))}<span class="tag">/&gt;</span><span class="string">
+      </span><span class="tag">&lt;ctextbox</span> source={idDel}<span class="tag">/&gt;</span><span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+</pre>
+  </body>
+</html>

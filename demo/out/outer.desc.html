@@ -1,0 +1,13 @@
+<html><head>
+<title>Outer</title>
+</head><body>
+
+<h1>Outer</h1>
+
+<center>[ <a target="showcase" href="/Demo/Outer/main">Application</a> | <a target="showcase" href="outer.urp.html"><tt>outer.urp</tt></a> | <a target="showcase" href="outer.urs.html"><tt>outer.urs</tt></a> | <a target="showcase" href="outer.ur.html"><tt>outer.ur</tt></a> ]</center>
+
+
+<p>SQL outer joins are no problem, as this demo shows.  Unlike with SQL, here we have static type inference determining for us which columns may become nullable as a result of an outer join, and the compiler will reject programs that make the wrong assumptions about that process.  The details of that nullification don't appear in this example, where the magic of type classes determines both the post-join type of each field and the right pretty-printing and parsing function for each of those types.</p>
+
+
+</body></html>

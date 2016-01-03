@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>nested.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">fun</span> <span class="function-name">pageA</span> () = return <span class="tag">&lt;xml&gt;</span><span class="string">
+  </span><span class="tag">&lt;head&gt;</span><span class="string">
+    </span><span class="tag">&lt;title&gt;</span><span class="string">A</span><span class="tag">&lt;/title&gt;</span><span class="string">
+  </span><span class="tag">&lt;/head&gt;</span><span class="string">
+  </span><span class="tag">&lt;body&gt;</span><span class="string">
+    </span><span class="tag">&lt;form&gt;</span><span class="string">
+      </span><span class="tag">&lt;table&gt;</span><span class="string">
+        </span><span class="tag">&lt;tr&gt;</span><span class="string">
+          </span><span class="tag">&lt;td&gt;</span><span class="string">Forename:</span><span class="tag">&lt;/td&gt;</span><span class="string">
+          </span><span class="tag">&lt;td&gt;&lt;textbox</span>{#<span class="cvariable">Forename</span>}<span class="tag">/&gt;&lt;/td&gt;</span><span class="string">
+        </span><span class="tag">&lt;/tr&gt;</span><span class="string">
+        </span><span class="tag">&lt;tr&gt;</span><span class="string">
+          </span><span class="tag">&lt;td&gt;</span><span class="string">Enter a Surname?</span><span class="tag">&lt;/td&gt;</span><span class="string">
+          </span><span class="tag">&lt;td&gt;&lt;checkbox</span>{#<span class="cvariable">EnterSurname</span>}<span class="tag">/&gt;&lt;/td&gt;</span><span class="string">
+        </span><span class="tag">&lt;/tr&gt;</span><span class="string">
+      </span><span class="tag">&lt;/table&gt;</span><span class="string">
+      </span><span class="tag">&lt;submit</span> action={fromA} <span class="tag">/&gt;</span><span class="string">
+    </span><span class="tag">&lt;/form&gt;</span><span class="string">
+  </span><span class="tag">&lt;/body&gt;</span><span class="string">
+</span><span class="tag">&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">fromA</span> r =
+    <span class="keyword">let</span>
+        <span class="keyword">val</span> <span class="variable-name">forename</span> = r.<span class="cvariable">Forename</span>
+
+        <span class="keyword">fun</span> <span class="function-name">pageB</span> () = return <span class="tag">&lt;xml&gt;</span><span class="string">
+          </span><span class="tag">&lt;head&gt;</span><span class="string">
+            </span><span class="tag">&lt;title&gt;</span><span class="string">B</span><span class="tag">&lt;/title&gt;</span><span class="string">
+          </span><span class="tag">&lt;/head&gt;</span><span class="string">
+          </span><span class="tag">&lt;body&gt;</span><span class="string">
+            </span><span class="tag">&lt;form&gt;</span><span class="string">
+              Surname:
+              </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">Surname</span>}<span class="tag">/&gt;</span><span class="string">
+              </span><span class="tag">&lt;submit</span> action={pageC'} <span class="tag">/&gt;</span><span class="string">
+            </span><span class="tag">&lt;/form&gt;</span><span class="string">
+            </span><span class="tag">&lt;a</span> link={pageA ()}<span class="tag">&gt;</span><span class="string">Previous</span><span class="tag">&lt;/a&gt;</span><span class="string">
+          </span><span class="tag">&lt;/body&gt;</span><span class="string">
+        </span><span class="tag">&lt;/xml&gt;</span>
+
+        <span class="keyword">and</span> <span class="function-name">pageC'</span> r = pageC (<span class="cvariable">Some</span> r.<span class="cvariable">Surname</span>)
+
+        <span class="keyword">and</span> <span class="function-name">pageC</span> surname = return <span class="tag">&lt;xml&gt;</span><span class="string">
+          </span><span class="tag">&lt;head&gt;</span><span class="string">
+            </span><span class="tag">&lt;title&gt;</span><span class="string">C</span><span class="tag">&lt;/title&gt;</span><span class="string">
+          </span><span class="tag">&lt;/head&gt;</span><span class="string">
+          </span><span class="tag">&lt;body&gt;</span><span class="string">
+            </span><span class="tag">&lt;p&gt;</span><span class="string">Hello </span>{[forename]}{<span class="keyword">case</span> surname <span class="keyword">of</span>
+                                      <span class="cvariable">None</span> =&gt; <span class="tag">&lt;xml/&gt;</span>
+                                    | <span class="cvariable">Some</span> s =&gt; <span class="tag">&lt;xml&gt;</span><span class="string"> </span>{[s]}<span class="tag">&lt;/xml&gt;</span>}<span class="tag">&lt;/p&gt;</span><span class="string">
+            </span>{<span class="keyword">case</span> surname <span class="keyword">of</span>
+                 <span class="cvariable">None</span> =&gt; <span class="tag">&lt;xml&gt;&lt;a</span> link={pageA ()}<span class="tag">&gt;</span><span class="string">Previous</span><span class="tag">&lt;/a&gt;&lt;/xml&gt;</span>
+               | <span class="cvariable">Some</span> _ =&gt; <span class="tag">&lt;xml&gt;&lt;a</span> link={pageB ()}<span class="tag">&gt;</span><span class="string">Previous</span><span class="tag">&lt;/a&gt;&lt;/xml&gt;</span>}<span class="string">
+          </span><span class="tag">&lt;/body&gt;</span><span class="string">
+        </span><span class="tag">&lt;/xml&gt;</span>
+    <span class="keyword">in</span>
+        <span class="keyword">if</span> r.<span class="cvariable">EnterSurname</span> <span class="keyword">then</span>
+            pageB ()
+        <span class="keyword">else</span>
+            pageC <span class="cvariable">None</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">val</span> <span class="variable-name">main</span> = pageA
+</pre>
+  </body>
+</html>

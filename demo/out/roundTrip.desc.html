@@ -1,0 +1,19 @@
+<html><head>
+<title>RoundTrip</title>
+</head><body>
+
+<h1>RoundTrip</h1>
+
+<center>[ <a target="showcase" href="/Demo/RoundTrip/main">Application</a> | <a target="showcase" href="roundTrip.urp.html"><tt>roundTrip.urp</tt></a> | <a target="showcase" href="buffer.urs.html"><tt>buffer.urs</tt></a> | <a target="showcase" href="buffer.ur.html"><tt>buffer.ur</tt></a> | <a target="showcase" href="roundTrip.urs.html"><tt>roundTrip.urs</tt></a> | <a target="showcase" href="roundTrip.ur.html"><tt>roundTrip.ur</tt></a> ]</center>
+
+
+<p>So far, we've seen examples of client-side code triggering the execution of server-side code.  Such remote calls only happen in response to client-side events.  It is often useful to allow a client to trigger events on other clients, and Ur/Web facilitates this with a simple asynchronous message-passing facility.  The current example introduces the basics of message-passing with a trivial use case, and the next example shows a more realistic case where several clients can communicate.</p>
+
+<p>We are going to provide a silly service where a client can send messages to the server, which the server then echoes back to the client.  The SQL table <tt>channels</tt> stores a mapping from client IDs to message channels.  The abstract type <tt>client</tt> holds unique client IDs, which Ur/Web generates automatically as needed.  A <tt>channel <i>T</i></tt> is a channel to which messages of type <tt><i>T</i></tt> can be sent.  Every channel belongs to a single client; anyone can send to a channel, but only the channel's owner can read the messages.  Every client is associated with a particular open page on a particular web browser somewhere.  Since web browsing sessions are ephemeral, clients and their channels are garbage-collected automatically as the web server loses contact with browsers.  When a client is garbage-collected, any database row mentioning it or one of its channels is deleted.  It's also possible to include <tt>option client</tt>s (and likewise for channels) in databases, in which case such columns are merely nulled out when they refer to dead clients.</p>
+
+<p>The <tt>main</tt> function begins by retrieving the current client ID, allocating a new channel, and associating that channel with the current client in the database.  Next, we allocate a buffer and return the page, which in its <tt>onload</tt> attribute starts two loops running in parallel.  In contrast to in the last example, here we only use <tt>spawn</tt> with the call to the first loop, since every client-side event handler is implicitly started in a new thread.</tt>
+
+<p>The first loop, <tt>receiver</tt>, repeatedly reads messages from the channel and writes them to the buffer.  The second loop, <tt>sender</tt>, periodically sends messages to the channel.  Client code can't send messages directly.  Instead, we must use server-side functions to do the sending.  Clients aren't trusted to pass channels to the server, so our server-side function <tt>writeBack</tt> instead keys off of the client ID, looking up the corresponding channel in the database.</p>
+
+
+</body></html>

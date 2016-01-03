@@ -1,0 +1,20 @@
+<html><head>
+<title>Constraints</title>
+</head><body>
+
+<h1>Constraints</h1>
+
+<center>[ <a target="showcase" href="/Demo/Constraints/main">Application</a> | <a target="showcase" href="constraints.urp.html"><tt>constraints.urp</tt></a> | <a target="showcase" href="constraints.urs.html"><tt>constraints.urs</tt></a> | <a target="showcase" href="constraints.ur.html"><tt>constraints.ur</tt></a> ]</center>
+
+
+<p>Ur/Web supports attaching SQL table constraints to table definitions.  We've sprinkled a few such constraints throughout our examples so far, without mentioning them.  This example shows a table with all four of the supported kinds of constraints.  An application would generally try to avoid inserting data that violates constraints, but, in this example, we let you insert arbitrary data, so that you can see each of the constraints failing.</p>
+
+<ol>
+        <li>The <tt>PRIMARY KEY</tt> constraint establishes the field of the table that we expect to use as a key in looking up specific rows.  It is an error for two rows to share the same primary key.</li>
+        <li>The <tt>UNIQUE</tt> constraint is like <tt>PRIMARY KEY</tt>, with the difference being that a table may have many <tt>UNIQUE</tt> constraints but no more than one primary key.</li>
+        <li>The <tt>CHECK</tt> constraint declares a boolean assertion that must hold for every row of the table.</li>
+        <li>The <tt>FOREIGN KEY</tt> constraint declares that a row of the table references a particular column of another table, or of the same table, as we see in this example.  It's a static type error to reference a foreign key column that has no <tt>PRIMARY KEY</tt> or <tt>UNIQUE</tt> constraint.</li>
+</ol>
+
+
+</body></html>

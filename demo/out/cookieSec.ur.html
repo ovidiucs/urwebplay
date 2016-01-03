@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>cookieSec.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">cookie</span> <span class="variable-name">username</span> : string
+
+<span class="keyword">table</span> <span class="variable-name">lastVisit</span> : { <span class="cvariable">User</span> : string, <span class="cvariable">When</span> : time }
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">User</span>
+
+<span class="keyword">fun</span> <span class="function-name">main</span> () =
+    userO &lt;- getCookie username;
+
+    list &lt;- queryX (<span class="sql">SELECT</span> * <span class="sql">FROM</span> lastVisit)
+                   (<span class="keyword">fn</span> r =&gt; <span class="tag">&lt;xml&gt;&lt;tr&gt;&lt;td&gt;</span>{[r.<span class="cvariable">LastVisit</span>.<span class="cvariable">User</span>]}<span class="tag">&lt;/td&gt;</span><span class="string"> </span><span class="tag">&lt;td&gt;</span>{[r.<span class="cvariable">LastVisit</span>.<span class="cvariable">When</span>]}<span class="tag">&lt;/td&gt;&lt;/tr&gt;&lt;/xml&gt;</span>);
+
+    return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      Cookie: </span>{[userO]}<span class="tag">&lt;br/&gt;</span><span class="string">
+
+      </span><span class="tag">&lt;table&gt;</span><span class="string">
+        </span><span class="tag">&lt;tr&gt;&lt;th&gt;</span><span class="string">User</span><span class="tag">&lt;/th&gt;</span><span class="string"> </span><span class="tag">&lt;th&gt;</span><span class="string">Last Visit</span><span class="tag">&lt;/th&gt;&lt;/tr&gt;</span><span class="string">
+        </span>{list}<span class="string">
+      </span><span class="tag">&lt;/table&gt;</span><span class="string">
+
+      </span><span class="tag">&lt;h2&gt;</span><span class="string">Set cookie value</span><span class="tag">&lt;/h2&gt;</span><span class="string">
+      </span><span class="tag">&lt;form&gt;&lt;textbox</span>{#<span class="cvariable">User</span>}<span class="tag">/&gt;</span><span class="string"> </span><span class="tag">&lt;submit</span> action={set}<span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+
+      </span><span class="tag">&lt;h2&gt;</span><span class="string">Record your visit</span><span class="tag">&lt;/h2&gt;</span><span class="string">
+      </span><span class="tag">&lt;form&gt;&lt;submit</span> action={imHere}<span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">set</span> r =
+    setCookie username {<span class="cvariable">Value</span> = r.<span class="cvariable">User</span>, <span class="cvariable">Expires</span> = <span class="cvariable">None</span>, <span class="cvariable">Secure</span> = <span class="cvariable">False</span>};
+    main ()
+
+<span class="keyword">and</span> <span class="function-name">imHere</span> () =
+    userO &lt;- getCookie username;
+    <span class="keyword">case</span> userO <span class="keyword">of</span>
+        <span class="cvariable">None</span> =&gt; return <span class="tag">&lt;xml&gt;</span><span class="string">You don't have a cookie set!</span><span class="tag">&lt;/xml&gt;</span>
+      | <span class="cvariable">Some</span> user =&gt;
+        dml (<span class="sql">DELETE</span> <span class="sql">FROM</span> lastVisit <span class="sql">WHERE</span> <span class="cvariable">User</span> = {[user]});
+        dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> lastVisit (<span class="cvariable">User</span>, <span class="cvariable">When</span>) <span class="sql">VALUES</span> ({[user]}, <span class="cvariable">CURRENT_TIMESTAMP</span>));
+        main ()
+
+</pre>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>tree.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">sequence</span> s
+<span class="keyword">table</span> <span class="variable-name">t</span> : { <span class="cvariable">Id</span> : int, <span class="cvariable">Parent</span> : option int, <span class="cvariable">Nam</span> : string }
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Id</span>,
+  <span class="sql">CONSTRAINT</span> <span class="cvariable">F</span> <span class="sql">FOREIGN</span> <span class="sql">KEY</span> <span class="cvariable">Parent</span> <span class="sql">REFERENCES</span> t (<span class="cvariable">Id</span>) <span class="sql">ON</span> <span class="sql">DELETE</span> <span class="sql">CASCADE</span>
+
+<span class="keyword">open</span> <span class="cvariable">TreeFun</span>.<span class="cvariable">Make</span>(<span class="keyword">struct</span>
+                      <span class="keyword">con</span> <span class="type-def">id</span> = #<span class="cvariable">Id</span>
+                      <span class="keyword">con</span> <span class="type-def">parent</span> = #<span class="cvariable">Parent</span>
+                      <span class="keyword">val</span> <span class="variable-name">tab</span> = t
+                  <span class="keyword">end</span>)
+
+<span class="keyword">fun</span> <span class="function-name">row</span> r = <span class="tag">&lt;xml&gt;</span><span class="string">
+  #</span>{[r.<span class="cvariable">Id</span>]}<span class="string">: </span>{[r.<span class="cvariable">Nam</span>]}<span class="string"> </span><span class="tag">&lt;form&gt;&lt;submit</span> action={del r.<span class="cvariable">Id</span>} value=<span class="string">"Delete"</span><span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+
+  </span><span class="tag">&lt;form&gt;</span><span class="string">
+    Add child: </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">Nam</span>}<span class="tag">/&gt;</span><span class="string"> </span><span class="tag">&lt;submit</span> action={add (<span class="cvariable">Some</span> r.<span class="cvariable">Id</span>)}<span class="tag">/&gt;</span><span class="string">
+  </span><span class="tag">&lt;/form&gt;</span><span class="string">
+</span><span class="tag">&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">main</span> () =
+    xml &lt;- tree row <span class="cvariable">None</span>;
+    return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      </span>{xml}<span class="string">
+
+      </span><span class="tag">&lt;form&gt;</span><span class="string">
+        Add a top-level node: </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">Nam</span>}<span class="tag">/&gt;</span><span class="string"> </span><span class="tag">&lt;submit</span> action={add <span class="cvariable">None</span>}<span class="tag">/&gt;</span><span class="string">
+      </span><span class="tag">&lt;/form&gt;</span><span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">add</span> parent r =
+    id &lt;- nextval s;
+    dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> t (<span class="cvariable">Id</span>, <span class="cvariable">Parent</span>, <span class="cvariable">Nam</span>) <span class="sql">VALUES</span> ({[id]}, {[parent]}, {[r.<span class="cvariable">Nam</span>]}));
+    main ()
+
+<span class="keyword">and</span> <span class="function-name">del</span> id () =
+    dml (<span class="sql">DELETE</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> <span class="cvariable">Id</span> = {[id]});
+    main ()
+</pre>
+  </body>
+</html>

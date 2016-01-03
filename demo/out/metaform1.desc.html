@@ -1,0 +1,16 @@
+<html><head>
+<title>Metaform1</title>
+</head><body>
+
+<h1>Metaform1</h1>
+
+<center>[ <a target="showcase" href="/Demo/Metaform1/main">Application</a> | <a target="showcase" href="metaform1.urp.html"><tt>metaform1.urp</tt></a> | <a target="showcase" href="metaform.urs.html"><tt>metaform.urs</tt></a> | <a target="showcase" href="metaform.ur.html"><tt>metaform.ur</tt></a> | <a target="showcase" href="metaform1.urs.html"><tt>metaform1.urs</tt></a> | <a target="showcase" href="metaform1.ur.html"><tt>metaform1.ur</tt></a> ]</center>
+
+
+<p>We can use metaprogramming with row types to build HTML forms (and their handlers) generically.  The functor <tt>Metaform.Make</tt> takes in a unit row <tt>fs</tt> and a value-level record <tt>names</tt> assigning string names to the fields of <tt>fs</tt>.  The functor implementation builds a form handler with a library function <tt>foldURX2</tt>, which runs over two value-level records in parallel, building an XML fragment.</p>
+
+<p>The form itself is generated using the more primitive <tt>foldUR</tt>.  We see the type <tt>xml form [] (mapU string cols)</tt> as the result of the fold.  This is the type of XML fragments that are suitable for inclusion in forms, require no form fields to be defined on entry, and themselves define form fields whose names and types are given by <tt>mapU string cols</tt>.  The <tt>useMore</tt> function "weakens" the type of an XML fragment, so that it "pretends" to require additional fields as input.  This weakening is necessary to accommodate the general typing rule for concatenating bits of XML.</tt>
+<p>The functor use in <tt>Metaform1</tt> is trivial.  The compiler infers the values of the structure members <tt>fs</tt> and <tt>fl</tt> from the type of the value provided for <tt>names</tt>.</p>
+
+
+</body></html>

@@ -1,0 +1,17 @@
+<html><head>
+<title>Ref</title>
+</head><body>
+
+<h1>Ref</h1>
+
+<center>[ <a target="showcase" href="/Demo/Ref/main">Application</a> | <a target="showcase" href="ref.urp.html"><tt>ref.urp</tt></a> | <a target="showcase" href="refFun.urs.html"><tt>refFun.urs</tt></a> | <a target="showcase" href="refFun.ur.html"><tt>refFun.ur</tt></a> | <a target="showcase" href="ref.urs.html"><tt>ref.urs</tt></a> | <a target="showcase" href="ref.ur.html"><tt>ref.ur</tt></a> ]</center>
+
+
+<p>This example shows how to mix the module system with SQL to implement a kind of "abstract data type."  The functor <tt>RefFun.Make</tt> takes in a type belonging to the type class of those types that may be included in SQL.  The functor output includes an abstract type <tt>ref</tt>, along with operations for working with <tt>ref</tt>s via transactions.  In the functor implementation, we see that <tt>ref</tt> is implemented as <tt>int</tt>, treated as primary keys of a SQL table.</p>
+
+<p>The functor creates a new encapsulated SQL sequence and table on each call.  These local relations show up in the automatically-generated SQL file that should be run to prepare the database for use, but they are invisible from client code.  We could change the functor to create different SQL relations, without needing to change client code.</p>
+
+<p>Note that, in <tt>ref.ur</tt>, the <tt>inj</tt> components of functor arguments are omitted.  Since these arguments are type class witnesses, the compiler infers them automatically based on the choices of <tt>data</tt>.</p>
+
+
+</body></html>

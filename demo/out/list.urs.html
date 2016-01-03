@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>list.urs</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">datatype</span> <span class="type-def">list</span> t = <span class="cvariable">Nil</span> | <span class="cvariable">Cons</span> <span class="keyword">of</span> t * list t
+
+<span class="keyword">val</span> <span class="variable-name">length</span> : t ::: <span class="keyword">Type</span> -&gt; list t -&gt; int
+
+<span class="keyword">val</span> <span class="variable-name">rev</span> : t ::: <span class="keyword">Type</span> -&gt; list t -&gt; list t
+</pre>
+  </body>
+</html>

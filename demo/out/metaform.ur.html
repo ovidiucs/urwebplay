@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>metaform.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .module-def {
+        /* font-lock-module-def-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">functor</span> <span class="module-def">Make</span> (<span class="cvariable">M</span> : <span class="keyword">sig</span>
+                  <span class="keyword">con</span> <span class="type-def">fs</span> :: {<span class="keyword">Unit</span>}
+                  <span class="keyword">val</span> <span class="variable-name">fl</span> : folder fs
+                  <span class="keyword">val</span> <span class="variable-name">names</span> : $(mapU string fs)
+              <span class="keyword">end</span>) = <span class="keyword">struct</span>
+
+    <span class="keyword">fun</span> <span class="function-name">handler</span> values = return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      </span>{@foldURX2 [string] [string] [body]
+        (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [rest :: {<span class="keyword">Unit</span>}] [[nm] ~ rest] name value =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+          </span><span class="tag">&lt;li&gt;</span><span class="string"> </span>{[name]}<span class="string"> = </span>{[value]}<span class="tag">&lt;/li&gt;</span><span class="string">
+        </span><span class="tag">&lt;/xml&gt;</span>)
+        <span class="cvariable">M</span>.fl <span class="cvariable">M</span>.names values}<span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+    <span class="keyword">fun</span> <span class="function-name">main</span> () = return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      </span><span class="tag">&lt;form&gt;</span><span class="string">
+        </span>{@foldUR [string] [<span class="keyword">fn</span> cols :: {<span class="keyword">Unit</span>} =&gt; xml form [] (mapU string cols)]
+          (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] [rest :: {<span class="keyword">Unit</span>}] [[nm] ~ rest] name
+                           (acc : xml form [] (mapU string rest)) =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                             </span><span class="tag">&lt;li&gt;</span><span class="string"> </span>{[name]}<span class="string">: </span><span class="tag">&lt;textbox</span>{nm}<span class="tag">/&gt;&lt;/li&gt;</span><span class="string">
+                             </span>{useMore acc}<span class="string">
+                           </span><span class="tag">&lt;/xml&gt;</span>)
+          <span class="tag">&lt;xml/&gt;</span>
+          <span class="cvariable">M</span>.fl <span class="cvariable">M</span>.names}<span class="string">
+        </span><span class="tag">&lt;submit</span> action={handler}<span class="tag">/&gt;</span><span class="string">
+      </span><span class="tag">&lt;/form&gt;</span><span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">end</span>
+</pre>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>batchFun.urs</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .module-def {
+        /* font-lock-module-def-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">con</span> <span class="type-def">colMeta</span> = <span class="keyword">fn</span> (db :: <span class="keyword">Type</span>, state :: <span class="keyword">Type</span>) =&gt;
+                 {<span class="cvariable">Nam</span> : string,
+                  <span class="cvariable">Show</span> : db -&gt; xbody,
+                  <span class="cvariable">Inject</span> : sql_injectable db,
+
+                  <span class="cvariable">NewState</span> : transaction state,
+                  <span class="cvariable">Widget</span> : state -&gt; xbody,
+                  <span class="cvariable">ReadState</span> : state -&gt; transaction db}
+<span class="keyword">con</span> <span class="type-def">colsMeta</span> = <span class="keyword">fn</span> cols :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)} =&gt; $(<span class="keyword">map</span> colMeta cols)
+
+<span class="keyword">val</span> <span class="variable-name">int</span> : string -&gt; colMeta (int, source string)
+<span class="keyword">val</span> <span class="variable-name">float</span> : string -&gt; colMeta (float, source string)
+<span class="keyword">val</span> <span class="variable-name">string</span> : string -&gt; colMeta (string, source string)
+
+<span class="keyword">functor</span> <span class="module-def">Make</span>(<span class="cvariable">M</span> : <span class="keyword">sig</span>
+                 <span class="keyword">con</span> <span class="type-def">cols</span> :: {(<span class="keyword">Type</span> * <span class="keyword">Type</span>)}
+                 <span class="keyword">constraint</span> [<span class="cvariable">Id</span>] ~ cols
+                 <span class="keyword">val</span> <span class="variable-name">fl</span> : folder cols
+
+                 <span class="keyword">table</span> <span class="variable-name">tab</span> : ([<span class="cvariable">Id</span> = int] ++ <span class="keyword">map</span> fst cols)
+
+                 <span class="keyword">val</span> <span class="variable-name">title</span> : string
+
+                 <span class="keyword">val</span> <span class="variable-name">cols</span> : colsMeta cols
+             <span class="keyword">end</span>) : <span class="keyword">sig</span>
+    <span class="keyword">val</span> <span class="variable-name">main</span> : unit -&gt; transaction page
+<span class="keyword">end</span>
+</pre>
+  </body>
+</html>

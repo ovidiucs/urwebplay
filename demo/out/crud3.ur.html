@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>crud3.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">table</span> <span class="variable-name">t</span> : {<span class="cvariable">Id</span> : int, <span class="cvariable">Text</span> : string}
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Id</span>
+
+<span class="keyword">open</span> <span class="cvariable">Crud</span>.<span class="cvariable">Make</span>(<span class="keyword">struct</span>
+                   <span class="keyword">val</span> <span class="variable-name">tab</span> = t
+                             
+                   <span class="keyword">val</span> <span class="variable-name">title</span> = <span class="string">"Crud3"</span>
+
+                   <span class="keyword">val</span> <span class="variable-name">cols</span> = {<span class="cvariable">Text</span> = {<span class="cvariable">Nam</span> = <span class="string">"Text"</span>,
+                                       <span class="cvariable">Show</span> = txt,
+                                       <span class="cvariable">Widget</span> = (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                                         </span><span class="tag">&lt;subform</span>{nm}<span class="tag">&gt;</span><span class="string">
+                                           </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">A</span>}<span class="tag">/&gt;</span><span class="string">
+                                           </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">B</span>}<span class="tag">/&gt;</span><span class="string">
+                                         </span><span class="tag">&lt;/subform&gt;</span><span class="string">
+                                       </span><span class="tag">&lt;/xml&gt;</span>),
+                                       <span class="cvariable">WidgetPopulated</span> = (<span class="keyword">fn</span> [nm :: <span class="keyword">Name</span>] s =&gt; <span class="tag">&lt;xml&gt;</span><span class="string">
+                                         </span><span class="tag">&lt;subform</span>{nm}<span class="tag">&gt;</span><span class="string">
+                                           </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">A</span>} value={s}<span class="tag">/&gt;</span><span class="string">
+                                           </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">B</span>}<span class="tag">/&gt;</span><span class="string">
+                                         </span><span class="tag">&lt;/subform&gt;</span><span class="string">
+                                       </span><span class="tag">&lt;/xml&gt;</span>),
+                                       <span class="cvariable">Parse</span> = (<span class="keyword">fn</span> p =&gt; p.<span class="cvariable">A</span> ^ p.<span class="cvariable">B</span>),
+                                       <span class="cvariable">Inject</span> = _
+                                      }
+                              }
+               <span class="keyword">end</span>)
+</pre>
+  </body>
+</html>

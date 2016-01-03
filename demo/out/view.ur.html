@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>view.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">table</span> <span class="variable-name">t</span> : { <span class="cvariable">A</span> : int }
+<span class="keyword">view</span> v = <span class="sql">SELECT</span> t.<span class="cvariable">A</span> <span class="sql">AS</span> <span class="cvariable">A</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> t.<span class="cvariable">A</span> &gt; 7
+
+<span class="keyword">fun</span> <span class="function-name">list</span> [u] (_ : fieldsOf u [<span class="cvariable">A</span> = int]) (title : string) (x : u) =
+    xml &lt;- queryX (<span class="sql">SELECT</span> * <span class="sql">FROM</span> x)
+           (<span class="keyword">fn</span> r : {<span class="cvariable">X</span> : {<span class="cvariable">A</span> : int}} =&gt; <span class="tag">&lt;xml&gt;&lt;li&gt;</span>{[r.<span class="cvariable">X</span>.<span class="cvariable">A</span>]}<span class="tag">&lt;/li&gt;&lt;/xml&gt;</span>);
+    return <span class="tag">&lt;xml&gt;</span><span class="string">
+      </span><span class="tag">&lt;h2&gt;</span>{[title]}<span class="tag">&lt;/h2&gt;</span><span class="string">
+      </span><span class="tag">&lt;ul&gt;</span>{xml}<span class="tag">&lt;/ul&gt;</span><span class="string">
+    </span><span class="tag">&lt;/xml&gt;</span>
+
+<span class="keyword">fun</span> <span class="function-name">main</span> () =
+    listT &lt;- list <span class="string">"T"</span> t;
+    listV &lt;- list <span class="string">"V"</span> v;
+    return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+      </span>{listT}<span class="string">
+      </span>{listV}<span class="string">
+      </span><span class="tag">&lt;br/&gt;</span><span class="string">
+
+      </span><span class="tag">&lt;form&gt;</span><span class="string">Insert: </span><span class="tag">&lt;textbox</span>{#<span class="cvariable">A</span>}<span class="tag">/&gt;</span><span class="string"> </span><span class="tag">&lt;submit</span> action={ins}<span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+    </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+
+<span class="keyword">and</span> <span class="function-name">ins</span> r =
+    dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> t (<span class="cvariable">A</span>) <span class="sql">VALUES</span> ({[readError r.<span class="cvariable">A</span>]}));
+    main ()
+</pre>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>roundTrip.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">table</span> <span class="variable-name">channels</span> : { <span class="cvariable">Client</span> : client, <span class="cvariable">Channel</span> : channel (string * int * float) }
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Client</span>
+
+<span class="keyword">fun</span> <span class="function-name">writeBack</span> v =
+    me &lt;- self;
+    r &lt;- oneRow (<span class="sql">SELECT</span> channels.<span class="cvariable">Channel</span> <span class="sql">FROM</span> channels <span class="sql">WHERE</span> channels.<span class="cvariable">Client</span> = {[me]});
+    send r.<span class="cvariable">Channels</span>.<span class="cvariable">Channel</span> v
+
+<span class="keyword">fun</span> <span class="function-name">action</span> () =
+    me &lt;- self;
+    ch &lt;- channel;
+    dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> channels (<span class="cvariable">Client</span>, <span class="cvariable">Channel</span>) <span class="sql">VALUES</span> ({[me]}, {[ch]}));
+    
+    buf &lt;- <span class="cvariable">Buffer</span>.create;
+
+    <span class="keyword">let</span>
+        <span class="keyword">fun</span> <span class="function-name">receiver</span> () =
+            v &lt;- recv ch;
+            <span class="cvariable">Buffer</span>.write buf (<span class="string">"("</span> ^ v.1 ^ <span class="string">", "</span> ^ show v.2 ^ <span class="string">", "</span> ^ show v.3 ^ <span class="string">")"</span>);
+            receiver ()
+
+        <span class="keyword">fun</span> <span class="function-name">sender</span> s n f =
+            sleep 2000;
+            rpc (writeBack (s, n, f));
+            sender (s ^ <span class="string">"!"</span>) (n + 1) (f + 1.23)
+    <span class="keyword">in</span>
+        return <span class="tag">&lt;xml&gt;&lt;body</span> onload={spawn (receiver ()); sender <span class="string">""</span> 0 0.0}<span class="tag">&gt;</span><span class="string">
+          </span><span class="tag">&lt;dyn</span> signal={<span class="cvariable">Buffer</span>.render buf}<span class="tag">/&gt;</span><span class="string">
+        </span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">fun</span> <span class="function-name">main</span> () = return <span class="tag">&lt;xml&gt;&lt;body&gt;</span><span class="string">
+  </span><span class="tag">&lt;form&gt;&lt;submit</span> value=<span class="string">"Begin demo"</span> action={action}<span class="tag">/&gt;&lt;/form&gt;</span><span class="string">
+</span><span class="tag">&lt;/body&gt;&lt;/xml&gt;</span>
+</pre>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>refFun.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .module-def {
+        /* font-lock-module-def-face */
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .tag {
+        /* font-lock-tag-face */
+        font-weight: bold;
+      }
+      .type-def {
+        /* font-lock-type-def-face */
+        font-weight: bold;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">functor</span> <span class="module-def">Make</span>(<span class="cvariable">M</span> : <span class="keyword">sig</span>
+                 <span class="keyword">type</span> <span class="type-def">data</span>
+                 <span class="keyword">val</span> <span class="variable-name">inj</span> : sql_injectable data
+             <span class="keyword">end</span>) = <span class="keyword">struct</span>
+
+    <span class="keyword">type</span> <span class="type-def">ref</span> = int
+
+    <span class="keyword">sequence</span> s
+    <span class="keyword">table</span> <span class="variable-name">t</span> : { <span class="cvariable">Id</span> : int, <span class="cvariable">Data</span> : <span class="cvariable">M</span>.data }
+      <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Id</span>
+
+    <span class="keyword">fun</span> <span class="function-name">new</span> d =
+        id &lt;- nextval s;
+        dml (<span class="sql">INSERT</span> <span class="sql">INTO</span> t (<span class="cvariable">Id</span>, <span class="cvariable">Data</span>) <span class="sql">VALUES</span> ({[id]}, {[d]}));
+        return id
+
+    <span class="keyword">fun</span> <span class="function-name">read</span> r =
+        o &lt;- oneOrNoRows (<span class="sql">SELECT</span> t.<span class="cvariable">Data</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> t.<span class="cvariable">Id</span> = {[r]});
+        <span class="keyword">case</span> o <span class="keyword">of</span>
+            <span class="cvariable">None</span> =&gt; error <span class="tag">&lt;xml&gt;</span><span class="string">You already deleted that ref!</span><span class="tag">&lt;/xml&gt;</span>
+          | <span class="cvariable">Some</span> r =&gt; return r.<span class="cvariable">T</span>.<span class="cvariable">Data</span>
+
+    <span class="keyword">fun</span> <span class="function-name">write</span> r d =
+        dml (<span class="sql">UPDATE</span> t <span class="sql">SET</span> <span class="cvariable">Data</span> = {[d]} <span class="sql">WHERE</span> <span class="cvariable">Id</span> = {[r]})
+
+    <span class="keyword">fun</span> <span class="function-name">delete</span> r =
+        dml (<span class="sql">DELETE</span> <span class="sql">FROM</span> t <span class="sql">WHERE</span> <span class="cvariable">Id</span> = {[r]})
+
+<span class="keyword">end</span>
+</pre>
+  </body>
+</html>

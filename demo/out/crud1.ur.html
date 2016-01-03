@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.34 in css mode. -->
+<html>
+  <head>
+    <title>crud1.ur</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .cvariable {
+        /* font-lock-cvariable-face */
+        color: #0000ff;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+        font-weight: bold;
+      }
+      .sql {
+        /* font-lock-sql-face */
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #00ff00;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #ffff00;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="keyword">table</span> <span class="variable-name">t1</span> : {<span class="cvariable">Id</span> : int, <span class="cvariable">A</span> : int, <span class="cvariable">B</span> : string, <span class="cvariable">C</span> : float, <span class="cvariable">D</span> : bool}
+  <span class="sql">PRIMARY</span> <span class="sql">KEY</span> <span class="cvariable">Id</span>
+
+<span class="keyword">open</span> <span class="cvariable">Crud</span>.<span class="cvariable">Make</span>(<span class="keyword">struct</span>
+                   <span class="keyword">val</span> <span class="variable-name">tab</span> = t1
+                             
+                   <span class="keyword">val</span> <span class="variable-name">title</span> = <span class="string">"Crud1"</span>
+                               
+                   <span class="keyword">val</span> <span class="variable-name">cols</span> = {<span class="cvariable">A</span> = <span class="cvariable">Crud</span>.int <span class="string">"A"</span>,
+                               <span class="cvariable">B</span> = <span class="cvariable">Crud</span>.string <span class="string">"B"</span>,
+                               <span class="cvariable">C</span> = <span class="cvariable">Crud</span>.float <span class="string">"C"</span>,
+                               <span class="cvariable">D</span> = <span class="cvariable">Crud</span>.bool <span class="string">"D"</span>}
+               <span class="keyword">end</span>)
+</pre>
+  </body>
+</html>

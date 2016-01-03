@@ -1,0 +1,15 @@
+<html><head>
+<title>CookieSec</title>
+</head><body>
+
+<h1>CookieSec</h1>
+
+<center>[ <a target="showcase" href="/Demo/CookieSec/main">Application</a> | <a target="showcase" href="cookieSec.urp.html"><tt>cookieSec.urp</tt></a> | <a target="showcase" href="cookieSec.urs.html"><tt>cookieSec.urs</tt></a> | <a target="showcase" href="cookieSec.ur.html"><tt>cookieSec.ur</tt></a> ]</center>
+
+
+<p>Ur/Web guarantees that compiled applications are immune to certain kinds of <a href="http://www.owasp.org/index.php/Top_10_2007-A5">cross site request forgery</a>.  For instance, a "phisher" might send many e-mails linking to a form that he has set up to look like your web site.  The form is connected to your web site, where it might, say, transfer money from your bank account to the phisher's account.  The phisher doesn't know your username, but, if that username is stored in a cookie, it will be sent automatically by your browser.  Ur/Web automatically signs cookie values cryptographically, with the signature included as a POST parameter and not part of a cookie, to prevent such attacks.</p>
+
+<p>This demo shows a simple mock-up of a situation where such an attack is often possible with traditional web frameworks.  You can set an arbitrary username for yourself in a cookie, and you can modify the database in a way that depends on the current cookie value.  Try getting the latter action to succeed without first setting your desired username in the cookie.  This should be roughly as impossible as cracking the particular cryptographic hash function that is used.</p>
+
+
+</body></html>
