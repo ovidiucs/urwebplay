@@ -159,7 +159,7 @@ functor Make(M : sig
               <form><submit action={delete} value="I was born sure!"/></form>
             </body></xml>
         end
-
+(*
     and admin () =
         ls <- editList ();
         return <xml><head>
@@ -170,6 +170,17 @@ functor Make(M : sig
 
           {ls}
         </body></xml>
+*)
+    and admin () =
+        ls <- editList ();
+		Auth.displayIfAuthenticated (
+        return <xml><head>
+          <title>{cdata M.title}</title>
+        </head><body>
 
+          <h1>{cdata M.title}</h1>
+
+          {ls}
+        </body></xml>)
 end
 
