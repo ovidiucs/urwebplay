@@ -4,5 +4,15 @@ fun counter n = return <xml><body>
   <a link={counter (n + 1)}>Increment</a><br/>
   <a link={counter (n - 1)}>Decrement</a>
 </body></xml>
-
-fun main () = counter 0
+(*
+fun square x = return <xml><body>
+  Current value: {[x]}<br/>
+  <a link={square (x * x)}>Square</a><br/>
+</body></xml>
+ *)
+fun acounter z = return <xml><body>
+  Current acounter: {[z]}<br/>
+  <a link={acounter (z + 1)}>Increment</a><br/>
+  <a link={acounter (z - 1)}>Decrement</a>
+</body></xml>
+fun main () =  counter (0) acounter (200)
