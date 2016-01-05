@@ -15,4 +15,4 @@ fun acounter z = return <xml><body>
   <a link={acounter (z + 1)}>Increment</a><br/>
   <a link={acounter (z - 1)}>Decrement</a>
 </body></xml>
-fun main () =  counter (0) acounter (200)
+fun main () =  counter (0)
